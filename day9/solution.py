@@ -1,18 +1,13 @@
 lines = [
-    list(map(int,
-             x.strip().split(" "))) for x in open("inp.txt").readlines()
+  list(map(int, x.strip().split(" "))) for x in open("inp.txt").readlines()
 ]
-
-
-def get_diffs(arr):
-  return [y - x for x, y in zip(arr, arr[1:])]
 
 # Part 1
 acc = 0
 for line in lines:
   diffs = [line]
   while any(x != 0 for x in diffs[-1]):
-    diffs += [get_diffs(diffs[-1])]
+    diffs.append([y - x for x, y in zip(diffs[-1], diffs[-1][1:])])
 
   curr = 0
   for diff in diffs[len(diffs) - 2::-1]:
@@ -21,18 +16,14 @@ for line in lines:
 print(acc)
 
 # Part 2
-
-def get_diffs2(arr):
-  return [y - x for x, y in zip(arr[::-1], arr[1:][::-1])]
-
 acc = 0
 for line in lines:
-  diffs = [line[::-1]]
+  diffs = [line]
   while any(x != 0 for x in diffs[-1]):
-    diffs += [get_diffs2(diffs[-1])]
+    diffs.append([y - x for x, y in zip(diffs[-1], diffs[-1][1:])])
 
   curr = 0
   for diff in diffs[len(diffs) - 2::-1]:
-    curr += diff[-1]
+    curr = -curr + diff[0]
   acc += curr
 print(acc)
